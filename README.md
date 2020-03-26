@@ -1,12 +1,26 @@
 # iota-jammer
 IOTA Tangle spammer written in Java
 
+## Run Jammer
+
+1: Download
+```
+sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.0/iotaJammerv1.0.tar.gz
+```
+```
+sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.0/iotaJammerv1.0.zip
+```
+2: Extract Files <br>  <br>
+3: Run with
+```
+java -jar iota-jammer-1.0-jar-with-dependencies.jar
+```
 ## Agruments for the program:
 
-java -jar iota-jammerXXXX.jar "address XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" EnableNodeList
+java -jar iota-jammerXXXX.jar "address XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" EnableNodeList "threads 5"
 
 ##  EnableNodeList : 
-Uses the Nodes which are listed in the node list. For every given node there will be created a new thread, unless specified         with the argument threads. If the option is deactivated the standard node http://node01.iotatoken.nl:14265/ will be used.
+Uses the Nodes which are listed in the node list. For every given node there will be created a new thread, unless specified with the argument threads. If the option is deactivated the standard node http://node01.iotatoken.nl:14265/ will be used.
 
 #### Usage:
 EnableNodeList
