@@ -13,7 +13,7 @@ sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.0/iotaJ
 2: Extract Files <br>  <br>
 3: Run with
 ```
-java -jar iota-jammer-1.0-jar-with-dependencies.jar
+java -jar iota-jammer-1.1.jar
 ```
 ## Agruments for the program:
 
