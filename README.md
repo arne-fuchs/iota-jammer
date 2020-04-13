@@ -50,6 +50,18 @@ Specifiys which tag should be used for the transactions. Default tag is IOTAJAMM
 #### Usage:
 "tag YOUR9TAG"
 
+## message : 
+Specifiys which message should be used for the transactions. Default tag is the link to this project.
+
+#### Usage:
+"message yourMessage"
+
+## reconnect : 
+Specifiys after how many transactions the program should reconnect to the node.
+
+#### Usage:
+"reconnect 10"
+
 ## threads : 
 Specifiys how many threads should be initialized for each node. Pc is able to lag if there are many threads with local proof of work enabled.
 
