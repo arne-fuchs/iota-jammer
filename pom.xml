@@ -6,7 +6,7 @@
 
     <groupId>spammer</groupId>
     <artifactId>iota-jammer</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <!-- https://mvnrepository.com/artifact/org.iota/jota -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

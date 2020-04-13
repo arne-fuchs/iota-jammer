@@ -81,7 +81,7 @@ public class IotaApi implements Runnable {
                     logger.log(Level.WARNING, api.getNodeInfo().toString());
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node!");
+                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
                 node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
             }
         } else {
@@ -100,7 +100,7 @@ public class IotaApi implements Runnable {
                     logger.log(Level.WARNING, response.toString());
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node!");
+                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
                 node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
             }
         }
@@ -111,7 +111,7 @@ public class IotaApi implements Runnable {
      */
     public void sendZeroValueTransaction() {
 
-        String message = TrytesConverter.asciiToTrytes("Transaktion am " + new SimpleDateFormat("yyyy.MM.dd.HH.mm.ss").format(System.currentTimeMillis()));
+        String message = TrytesConverter.asciiToTrytes(iotaJammer.getMessage());
         String tag = iotaJammer.getTag();
         int securityLevel = 2;
         int value = 0;
@@ -135,7 +135,7 @@ public class IotaApi implements Runnable {
             }
             logger.log(Level.INFO, GREEN + threadName + ": Transaction complete!" + RESET);
         } catch (Exception e) {
-            logger.log(Level.WARNING, threadName + " Error: Could not send transaction!");
+            logger.log(Level.WARNING, threadName + " Error: Could not send transaction! "  + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
             node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
         }
     }
@@ -143,9 +143,17 @@ public class IotaApi implements Runnable {
     @Override
     public void run() {
         connect();
-        while (!endThread) {
-            sendZeroValueTransaction();
-        }
+            if (iotaJammer.getReconnect() > 0) {
+                while (!endThread) {
+                    connect();
+                    for(int i = 0; i < iotaJammer.getReconnect();i++){
+                        sendZeroValueTransaction();
+                    }
+                }
+            }else
+            while (!endThread) {
+                sendZeroValueTransaction();
+            }
     }
 
     /**

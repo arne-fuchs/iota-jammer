@@ -24,9 +24,12 @@ public class IOTAJammer {
     private boolean localPOW = false;
     private int threadAmount = 1;
 
+    private int reconnect = 0;
+
     private String seed = null;
     private String address = null;
     private String tag = null;
+    private String message = null;
 
 
     /**
@@ -57,8 +60,14 @@ public class IOTAJammer {
                 case "tag":
                     iotaJammer.tag = argument.split(" ")[1];
                     break;
+                case "message":
+                    iotaJammer.message = argument.split(" ")[1];
+                    break;
                 case "threads":
                     iotaJammer.threadAmount = Integer.parseInt(argument.split(" ")[1]);
+                    break;
+                case "reconnect":
+                    iotaJammer.reconnect = Integer.parseInt(argument.split(" ")[1]);
                     break;
                 default:
                     System.out.println(RED + "Invalid Argument: " + argument);
@@ -149,6 +158,12 @@ public class IOTAJammer {
      */
     public int getNodeListSize() {
         return nodes.size();
+    }
+
+    public String getMessage() { return message == null ? "https://paesserver.de/iota-jammer.html" : message; }
+
+    public int getReconnect() {
+        return reconnect;
     }
 
 }
