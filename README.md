@@ -1,4 +1,4 @@
-# iota-jammer
+# iota-jammer (java-spammer)
 IOTA Tangle spammer written in Java
 
 ## Run Jammer
