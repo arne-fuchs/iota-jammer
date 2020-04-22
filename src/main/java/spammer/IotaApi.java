@@ -7,7 +7,6 @@ import org.iota.jota.model.Transfer;
 import org.iota.jota.pow.pearldiver.PearlDiverLocalPoW;
 import org.iota.jota.utils.TrytesConverter;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -123,9 +122,8 @@ public class IotaApi implements Runnable {
 
         transfers.add(zeroValueTransaction);
 
-
-        int depth = 4;
-        int minimumWeightMagnitude = 14;
+        int depth = iotaJammer.getDepth();
+        int minimumWeightMagnitude = iotaJammer.getMwm();
 
         try {
             SendTransferResponse response = api.sendTransfer(iotaJammer.getSeed(), securityLevel, depth, minimumWeightMagnitude, transfers, null, null, false, false, null);

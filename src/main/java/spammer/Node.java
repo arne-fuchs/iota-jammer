@@ -50,6 +50,17 @@ public class Node {
         }
     }
 
+    public void initThreads(long delay) throws InterruptedException {
+        for (int i = 0; i < amountThreads; i++) {
+            iotaApi[i] = new IotaApi(i, nodeURL, iotaJammer, this);
+            threads[i] = new Thread(iotaApi[i], String.valueOf(i));
+        }
+        for (int i = 0; i < amountThreads; i++) {
+            Thread.sleep(delay);
+            threads[i].start();
+        }
+    }
+
     /**
      * Adds ErrorMessage to the ErrorList
      */

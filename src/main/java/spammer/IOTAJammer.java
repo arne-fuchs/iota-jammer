@@ -23,8 +23,11 @@ public class IOTAJammer {
     private boolean nodeListEnabled = false;
     private boolean localPOW = false;
     private int threadAmount = 1;
+    private long delay = 0;
 
     private int reconnect = 0;
+    private int mwm = 0;
+    private int depth = 0;
 
     private String seed = null;
     private String address = null;
@@ -69,18 +72,32 @@ public class IOTAJammer {
                 case "reconnect":
                     iotaJammer.reconnect = Integer.parseInt(argument.split(" ")[1]);
                     break;
+                case "mwm":
+                    iotaJammer.mwm = Integer.parseInt(argument.split(" ")[1]);
+                    break;
+                case "depth":
+                    iotaJammer.depth = Integer.parseInt(argument.split(" ")[1]);
+                    break;
+                case "delay":
+                    iotaJammer.delay = Integer.parseInt(argument.split(" ")[1]);
+                    break;
                 default:
                     System.out.println(RED + "Invalid Argument: " + argument);
             }
         }
-        iotaJammer.threadManager();
+        try {
+            iotaJammer.threadManager();
+        }
+        catch(InterruptedException e){
+            System.out.println("Failed starting threads with delay! Try removing the \"delay\" argument!");
+        }
     }
 
     /***
      * Start all threads for the IOTAJammer
      *
      */
-    private void threadManager() {
+    private void threadManager() throws InterruptedException {
         if (threadAmount > 1 && localPOW || localPOW && nodeListEnabled) {
             System.out.println(RED + "Warning! " + YELLOW + "Having more than 1 Thread or node list enabled and local proof of work enabled can lead the pc to be laggy!" + RESET);
         }
@@ -90,12 +107,18 @@ public class IOTAJammer {
                 nodes.add(new Node(url, this, threadAmount));//Creates Nodes with url from nodeList and thread amount
             }
             for (int i = 0; i < nodeList.length; i++) {
-                nodes.get(i).initThreads();//Starts all Threads from Nodes
+                if(delay == 0)
+                    nodes.get(i).initThreads();//Starts all Threads from Nodes
+                else
+                    nodes.get(i).initThreads(delay);//Starts all Threads from Nodes with delay
             }
         } else {
             for (int i = 0; i < threadAmount; i++) {
                 nodes.add(new Node(null, this, threadAmount));//Creates Nodes from .properties and thread amount
-                nodes.get(i).initThreads();
+                if(delay == 0)
+                    nodes.get(i).initThreads();
+                else
+                    nodes.get(i).initThreads(delay);
             }
         }
         new Thread(new TpsCounter(this), "tpsCounter").start();
@@ -164,6 +187,14 @@ public class IOTAJammer {
 
     public int getReconnect() {
         return reconnect;
+    }
+
+    public int getMwm(){
+        return mwm == 0 ? 14 : mwm;
+    }
+
+    public int getDepth() {
+        return depth == 0 ? 4 : depth;
     }
 
 }
