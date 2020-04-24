@@ -53,7 +53,7 @@ The json can be build as follwed:
 }
 ```
 In the first node all parameters you can use are listed.
-As you can see in the second one , you don't have to specify any of the parameters. The minimum of parameters the programm needs are: <br> protocol (http/https), host (urltonode.com) and port (mostly 14265 or 443).
+As you can see in the second one , you don't have to specify all of the parameters. The minimum of parameters the programm needs are: <br> protocol (http/https), host (urltonode.com) and port (mostly 14265 or 443).
 
 #### Usage:
 EnableJSONList
