@@ -28,6 +28,7 @@ EnableNodeList
 ##  EnableJSONList : 
 Reads the nodes.json files and starts threads with the given parameters in the json. You can specify all parameters for every individual node in the json. If some parameters are not sepcified, the default ones will be used. You can run this with the argument EnableNodeList. In this way you can add exceptions for some nodes.
 The json can be build as follwed:
+```
 {
   "SomeNode1" : {
     "protocol" : "http",
@@ -38,8 +39,8 @@ The json can be build as follwed:
     "address" : "anyAddress",
     "tag" : "IOTAJAMMER",
     "message" : "A cool message for your friends",
-    "threads" : 1,
-    "reconnect" : 100,
+    "threads" : 1,<br>
+    "reconnect" : 100,<br>
     "mwm" : 14,
     "depth" : 4
   },
@@ -50,7 +51,7 @@ The json can be build as follwed:
     "threads" : 5
   }
 }
-
+```
 In the first node all parameters you can use are listed.
 As you can see in the second one , you don't have to specify any of the parameters. The minimum of parameters the programm needs are: <br> protocol(http/https), host(urltonode.com) and port(mostly 14265 or 443).
 
