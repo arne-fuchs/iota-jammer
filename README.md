@@ -57,7 +57,7 @@ Specifiys how many threads should be initialized for each node. Pc is able to la
 "threads 5"
 
 ## reconnect : 
-Specifiys after how many transactions the spammer should reconnect to the node. It can improve performance for long term use. Default is 0
+Specifiys after how many transactions the spammer should reconnect to the node. It can improve performance for long term use. Default is 0 (without reconnect)
 
 #### Usage:
 "reconnect 100"
@@ -68,7 +68,7 @@ Specifiys which minimum weight magnitued should be used for the transactions. De
 #### Usage:
 "mwm 16"
 
-# depth : 
+## depth : 
 Specifiys which depth should be used for the transactions. Default is 4.
 
 #### Usage:
