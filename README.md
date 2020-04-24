@@ -5,15 +5,12 @@ IOTA Tangle spammer written in Java
 
 1: Download
 ```
-sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.0/iotaJammerv1.0.tar.gz
-```
-```
-sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.0/iotaJammerv1.0.zip
+sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.2/iota-jammer-1.2.tar.gz
 ```
 2: Extract Files <br>  <br>
 3: Run with
 ```
-java -jar iota-jammer-1.0-jar-with-dependencies.jar
+java -jar iota-jammer-1.2.jar
 ```
 ## Agruments for the program:
 
