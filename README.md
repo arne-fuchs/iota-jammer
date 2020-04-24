@@ -39,8 +39,8 @@ The json can be build as follwed:
     "address" : "anyAddress",
     "tag" : "IOTAJAMMER",
     "message" : "A cool message for your friends",
-    "threads" : 1,<br>
-    "reconnect" : 100,<br>
+    "threads" : 1,
+    "reconnect" : 100,
     "mwm" : 14,
     "depth" : 4
   },
