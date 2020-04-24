@@ -56,6 +56,25 @@ Specifiys how many threads should be initialized for each node. Pc is able to la
 #### Usage:
 "threads 5"
 
+## reconnect : 
+Specifiys after how many transactions the spammer should reconnect to the node. It can improve performance for long term use. Default is 0
+
+#### Usage:
+"reconnect 100"
+
+## mwm : 
+Specifiys which minimum weight magnitued should be used for the transactions. Default is 14.
+
+#### Usage:
+"mwm 16"
+
+# depth : 
+Specifiys which depth should be used for the transactions. Default is 4.
+
+#### Usage:
+"depth 4"
+
+
 ## Donations
 even very small ones, are always welcome and makes me happy:
 DPGDUNCNMPLKIHR9HFOOKEZUXTVWSCESZNDNXOBYXWOF9FETDQLULIRRWICOQSJMYXXRNWWO9MQPQJGEWMIJVCMNYC
