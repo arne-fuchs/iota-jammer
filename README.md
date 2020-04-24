@@ -5,25 +5,57 @@ IOTA Tangle spammer written in Java
 
 1: Download
 ```
-sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.2/iota-jammer-1.2.tar.gz
+sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.3/iota-jammer-1.3.tar.gz
 ```
 2: Extract Files 
 ```
-tar -xvzf iota-jammer-1.2.tar.gz && cd iota-jammer-1.2
+tar -xvzf iota-jammer-1.2.tar.gz && cd iota-jammer-1.3
 ```
 3: Run with
 ```
-java -jar iota-jammer-1.2.jar
+java -jar iota-jammer-1.3.jar
 ```
 ## Agruments for the program:
 
 java -jar iota-jammerXXXX.jar "address XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" EnableNodeList "threads 5"
 
 ##  EnableNodeList : 
-Uses the Nodes which are listed in the node list. For every given node there will be created a new thread, unless specified with the argument threads. If the option is deactivated the standard node http://node01.iotatoken.nl:14265/ will be used.
+Uses the Nodes which are listed in the node list. For every given node there will be created a new thread, unless specified with the argument threads. If the option is deactivated the standard node in the node_config.properties will be used.
 
 #### Usage:
 EnableNodeList
+
+##  EnableJSONList : 
+Reads the nodes.json files and starts threads with the given parameters in the json. You can specify all parameters for every individual node in the json. If some parameters are not sepcified, the default ones will be used. You can run this with the argument EnableNodeList. In this way you can add exceptions for some nodes.
+The json can be build as follwed:
+{
+  "SomeNode1" : {
+    "protocol" : "http",
+    "host" : "somenode.url",
+    "port" : 14265,
+    "EnableLocalPOW" : true,
+    "seed" : "some seed you may want to use",
+    "address" : "anyAddress",
+    "tag" : "IOTAJAMMER",
+    "message" : "A cool message for your friends",
+    "threads" : 1,
+    "reconnect" : 100,
+    "mwm" : 14,
+    "depth" : 4
+  },
+  "SomeNode2" : {
+    "protocol" : "https",
+    "host" : "someothercoolnode.url",
+    "port" : 443,
+    "threads" : 5
+  }
+}
+
+In the first node all parameters you can use are listed.
+As you can see in the second one , you don't have to specify any of the parameters. The minimum of parameters the programm needs are: <br> protocol(http/https), host(urltonode.com) and port(mostly 14265 or 443).
+
+#### Usage:
+EnableJSONList
 
 ## EnableLocalPOW : 
 Enables local proof of work for validating transactions. It is more possible to get a valid transaction if local proof of work is enabled.
