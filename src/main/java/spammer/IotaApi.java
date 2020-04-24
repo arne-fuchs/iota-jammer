@@ -19,14 +19,14 @@ import static spammer.errorHandling.ErrorType.COULD_NOT_SEND_TRANSACTION;
 
 public class IotaApi implements Runnable {
 
-    private Node node;
+    private final NodeThreadManager nodeThreadManager;
     private IotaAPI api;
     private String nodeURL;
 
     private Boolean endThread = false;
-    private String threadName;
+    private final String threadName;
 
-    private IOTAJammer iotaJammer;
+    //private IOTAJammer iotaJammer;
 
     Logger logger = Logger.getLogger(IotaApi.class.getName());
 
@@ -34,19 +34,17 @@ public class IotaApi implements Runnable {
     /***
      * Init Object of Iota-Api
      *
-     * @param iotaJammer as Controller
-     * @param nodeURL URL to node
      * @param threadId identifier thread
      */
-    public IotaApi(int threadId, String nodeURL, IOTAJammer iotaJammer, Node node) {
+    public IotaApi(int threadId, NodeThreadManager nodeThreadManager) {
         if (nodeURL == null) {
             this.threadName = "Thread: " + threadId;
         } else {
             this.threadName = "Thread: " + threadId + " Node: " + nodeURL;
         }
-        this.nodeURL = nodeURL;
-        this.iotaJammer = iotaJammer;
-        this.node = node;
+        this.nodeURL = nodeThreadManager.getNodeURL();
+        //this.iotaJammer = nodeThreadManager.getIotaJammer();
+        this.nodeThreadManager = nodeThreadManager;
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT] [%4$-7s] %5$s %n");
         logger.setLevel(Level.INFO);
@@ -64,7 +62,7 @@ public class IotaApi implements Runnable {
             String url = nodeURL.split("//")[1].split(":")[0];
             int port = Integer.parseInt(nodeURL.split(":")[2]);
             try {
-                api = iotaJammer.isLocalPOW() ? new IotaAPI.Builder()
+                api = nodeThreadManager.isLocalPOW() ? new IotaAPI.Builder()
                         .protocol(protocol)
                         .host(url)
                         .port(port)
@@ -76,17 +74,17 @@ public class IotaApi implements Runnable {
                                 .port(port)
                                 .build();
 
-                if (iotaJammer.isDEBUG_MODE()) {
+                if (nodeThreadManager.isDEBUG_MODE()) {
                     logger.log(Level.WARNING, api.getNodeInfo().toString());
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
-                node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
+                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (nodeThreadManager.isDEBUG_MODE() ? e.toString() : ""));
+                nodeThreadManager.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
             }
         } else {
             try {
                 Properties configFile = NodeFileReader.getPropertyFile();
-                api = iotaJammer.isLocalPOW() ? new IotaAPI.Builder()
+                api = nodeThreadManager.isLocalPOW() ? new IotaAPI.Builder()
                         .config(configFile)
                         .localPoW(new PearlDiverLocalPoW())
                         .build() :
@@ -95,12 +93,12 @@ public class IotaApi implements Runnable {
                                 .build();
 
                 response = api.getNodeInfo();
-                if (iotaJammer.isDEBUG_MODE()) {
+                if (nodeThreadManager.isDEBUG_MODE()) {
                     logger.log(Level.WARNING, response.toString());
                 }
             } catch (Exception e) {
-                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
-                node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
+                logger.log(Level.WARNING, threadName + ": Error: Could not connect to Node! " + (nodeThreadManager.isDEBUG_MODE() ? e.toString() : ""));
+                nodeThreadManager.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
             }
         }
     }
@@ -110,41 +108,41 @@ public class IotaApi implements Runnable {
      */
     public void sendZeroValueTransaction() {
 
-        String message = TrytesConverter.asciiToTrytes(iotaJammer.getMessage());
-        String tag = iotaJammer.getTag();
+        String message = TrytesConverter.asciiToTrytes(nodeThreadManager.getMessage());
+        String tag = nodeThreadManager.getTag();
         int securityLevel = 2;
         int value = 0;
 
-        Transfer zeroValueTransaction = new Transfer(iotaJammer.getAddress(), value, message, tag);
+        Transfer zeroValueTransaction = new Transfer(nodeThreadManager.getAddress(), value, message, tag);
 
         @SuppressWarnings("Convert2Diamond")
         ArrayList<Transfer> transfers = new ArrayList<Transfer>();
 
         transfers.add(zeroValueTransaction);
 
-        int depth = iotaJammer.getDepth();
-        int minimumWeightMagnitude = iotaJammer.getMwm();
+        int depth = nodeThreadManager.getDepth();
+        int minimumWeightMagnitude = nodeThreadManager.getMwm();
 
         try {
-            SendTransferResponse response = api.sendTransfer(iotaJammer.getSeed(), securityLevel, depth, minimumWeightMagnitude, transfers, null, null, false, false, null);
-            node.raiseTps();
-            if (iotaJammer.isDEBUG_MODE()) {
+            SendTransferResponse response = api.sendTransfer(nodeThreadManager.getSeed(), securityLevel, depth, minimumWeightMagnitude, transfers, null, null, false, false, null);
+            nodeThreadManager.raiseTps();
+            if (nodeThreadManager.isDEBUG_MODE()) {
                 logger.log(Level.INFO, threadName + response.getTransactions());
             }
             logger.log(Level.INFO, GREEN + threadName + ": Transaction complete!" + RESET);
         } catch (Exception e) {
-            logger.log(Level.WARNING, threadName + " Error: Could not send transaction! "  + (iotaJammer.isDEBUG_MODE() ? e.toString() : ""));
-            node.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
+            logger.log(Level.WARNING, threadName + " Error: Could not send transaction! "  + (nodeThreadManager.isDEBUG_MODE() ? e.toString() : ""));
+            nodeThreadManager.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
         }
     }
 
     @Override
     public void run() {
         connect();
-            if (iotaJammer.getReconnect() > 0) {
+            if (nodeThreadManager.getReconnect() > 0) {
                 while (!endThread) {
                     connect();
-                    for(int i = 0; i < iotaJammer.getReconnect();i++){
+                    for(int i = 0; i < nodeThreadManager.getReconnect();i++){
                         sendZeroValueTransaction();
                     }
                 }

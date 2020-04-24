@@ -27,8 +27,21 @@
         <groupId>org.iota</groupId>
         <artifactId>jota</artifactId>
         <version>1.0.0-beta8</version>
-    </dependency>
-</dependencies>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.json/json -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.json-simple</groupId>
+            <artifactId>json-simple</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
+    </dependencies>
     <build>
         <plugins>
             <plugin>
@@ -44,6 +57,14 @@
                     </descriptorRefs>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>11</source>
+                    <target>11</target>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <!-- resource processsing with a different output directory
@@ -53,6 +74,7 @@
                 <includes>
                     <include>nodeList</include>
                     <include>node_config.properties</include>
+                    <include>nodes.json</include>
                 </includes>
                 <!-- relative to target/classes
                      i.e. ${project.build.outputDirectory} -->

@@ -1,0 +1,20 @@
+{
+  "SomeNode1" : {
+    "protocol" : "http",
+    "host" : "node02.iotatoken.nl",
+    "port" : 14265,
+    "EnableLocalPOW" : true,
+    "address" : "9FNJWLMBECSQDKHQAGDHDPXBMZFMQIMAFAUIQTDECJVGKJBKHLEBVU9TWCTPRJGYORFDSYENIQKBVSYKW9NSLGS9UW",
+    "tag" : "IOTAJAMMER",
+    "threads" : 1,
+    "reconnect" : 100,
+    "mwm" : 14,
+    "depth" : 4
+  },
+  "SomeNode2" : {
+    "protocol" : "https",
+    "host" : "perma.iota.partners",
+    "port" : 443,
+    "threads" : 5
+  }
+}

@@ -1,6 +1,6 @@
 package spammer;
 
-import org.iota.jota.utils.SeedRandomGenerator;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,27 +12,9 @@ import static spammer.ConsoleColors.*;
  *
  * @author Arne Fuchs, Robin Schumacher
  */
-public class IOTAJammer {
+public class IOTAJammer extends VariablesHolder{
 
-    /**
-     * DEBUG MODE
-     **/
-    private boolean DEBUG_MODE = false;
-    private ArrayList<Node> nodes = new ArrayList<Node>();
-
-    private boolean nodeListEnabled = false;
-    private boolean localPOW = false;
-    private int threadAmount = 1;
-    private long delay = 0;
-
-    private int reconnect = 0;
-    private int mwm = 0;
-    private int depth = 0;
-
-    private String seed = null;
-    private String address = null;
-    private String tag = null;
-    private String message = null;
+    private ArrayList<NodeThreadManager> nodeThreadManagers = new ArrayList<NodeThreadManager>();
 
 
     /**
@@ -47,6 +29,9 @@ public class IOTAJammer {
             switch (argument.split(" ")[0]) {
                 case "EnableNodeList":
                     iotaJammer.nodeListEnabled = true;
+                    break;
+                case "EnableJSONList":
+                    iotaJammer.jsonListEnabled = true;
                     break;
                 case "EnableLocalPOW":
                     iotaJammer.localPOW = true;
@@ -64,7 +49,7 @@ public class IOTAJammer {
                     iotaJammer.tag = argument.split(" ")[1];
                     break;
                 case "message":
-                    iotaJammer.message = argument.split(" ")[1];
+                    iotaJammer.message = argument.split(" ",2)[1];
                     break;
                 case "threads":
                     iotaJammer.threadAmount = Integer.parseInt(argument.split(" ")[1]);
@@ -82,7 +67,7 @@ public class IOTAJammer {
                     iotaJammer.delay = Integer.parseInt(argument.split(" ")[1]);
                     break;
                 default:
-                    System.out.println(RED + "Invalid Argument: " + argument);
+                    System.out.println(RED + "Invalid Argument: " + argument + RESET);
             }
         }
         try {
@@ -98,70 +83,35 @@ public class IOTAJammer {
      *
      */
     private void threadManager() throws InterruptedException {
-        if (threadAmount > 1 && localPOW || localPOW && nodeListEnabled) {
-            System.out.println(RED + "Warning! " + YELLOW + "Having more than 1 Thread or node list enabled and local proof of work enabled can lead the pc to be laggy!" + RESET);
+        new Thread(new TpsCounter(this), "tpsCounter").start();
+        if (threadAmount > 1 && localPOW || localPOW && nodeListEnabled || jsonListEnabled) {
+            System.out.println(RED + "Warning! " + YELLOW + "Having more than 1 thread and local proof of work enabled can lead the pc to be laggy!" + RESET);
         }
         if (nodeListEnabled) {
             String[] nodeList = NodeFileReader.getNodesArray();
             for (String url : nodeList) {
-                nodes.add(new Node(url, this, threadAmount));//Creates Nodes with url from nodeList and thread amount
+                nodeThreadManagers.add(new NodeThreadManager(url, this));//Creates Nodes with url from nodeList and thread amount
             }
-            for (int i = 0; i < nodeList.length; i++) {
-                if(delay == 0)
-                    nodes.get(i).initThreads();//Starts all Threads from Nodes
-                else
-                    nodes.get(i).initThreads(delay);//Starts all Threads from Nodes with delay
-            }
-        } else {
-            for (int i = 0; i < threadAmount; i++) {
-                nodes.add(new Node(null, this, threadAmount));//Creates Nodes from .properties and thread amount
-                if(delay == 0)
-                    nodes.get(i).initThreads();
-                else
-                    nodes.get(i).initThreads(delay);
-            }
+        } else {//Creates Nodes from .properties and thread amount
+            if(delay == 0 && !jsonListEnabled)
+                new NodeThreadManager((String) null, this).initThreads();
+            else
+                new NodeThreadManager((String) null, this).initThreads(delay);
         }
-        new Thread(new TpsCounter(this), "tpsCounter").start();
-        System.out.println("Finished starting " + threadAmount + " Threads");
-    }
-
-    /**
-     * isLocalPOW Enabled
-     *
-     * @return isLocalPOW
-     */
-    public boolean isLocalPOW() {
-        return localPOW;
-    }
-
-    /***
-     * Getter seed
-     * @return seed
-     */
-    public String getSeed() {
-        return seed == null ? SeedRandomGenerator.generateNewSeed() : seed;
-    }
-
-    /**
-     * Getter Adress
-     *
-     * @return address
-     */
-    public String getAddress() {
-        return address == null ? "9FNJWLMBECSQDKHQAGDHDPXBMZFMQIMAFAUIQTDECJVGKJBKHLEBVU9TWCTPRJGYORFDSYENIQKBVSYKW9NSLGS9UW" : address;
-    }
-
-    public String getTag() {
-        return tag == null ? "IOTAJAMMER" : tag;
-    }
-
-    /**
-     * isDEBUG_MODE
-     *
-     * @return DEBUG_MODE
-     */
-    public boolean isDEBUG_MODE() {
-        return DEBUG_MODE;
+        if(jsonListEnabled){
+            java.util.ArrayList<JSONObject> jsonObjectsArrayList = NodeFileReader.getJsonNodes();
+            if(jsonObjectsArrayList != null)
+                for(JSONObject jsonObject : jsonObjectsArrayList){
+                    nodeThreadManagers.add(new NodeThreadManager(jsonObject,this));
+                }
+        }
+        for (int i = 0; i < nodeThreadManagers.size(); i++) {
+            if(delay == 0)
+                nodeThreadManagers.get(i).initThreads();//Starts all Threads from Nodes
+            else
+                nodeThreadManagers.get(i).initThreads(delay);//Starts all Threads from Nodes with delay
+        }
+        System.out.println("Finished starting threads");
     }
 
     /**
@@ -170,8 +120,8 @@ public class IOTAJammer {
      * @param index
      * @return node
      */
-    public Node getNode(int index) {
-        return nodes.get(index);
+    public NodeThreadManager getNode(int index) {
+        return nodeThreadManagers.get(index);
     }
 
     /**
@@ -180,21 +130,7 @@ public class IOTAJammer {
      * @return int nodes.size()
      */
     public int getNodeListSize() {
-        return nodes.size();
-    }
-
-    public String getMessage() { return message == null ? "https://paesserver.de/iota-jammer.html" : message; }
-
-    public int getReconnect() {
-        return reconnect;
-    }
-
-    public int getMwm(){
-        return mwm == 0 ? 14 : mwm;
-    }
-
-    public int getDepth() {
-        return depth == 0 ? 4 : depth;
+        return nodeThreadManagers.size();
     }
 
 }
