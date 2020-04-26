@@ -34,24 +34,20 @@ public class TpsCounter implements Runnable {
                         iotaJammer.getNode(i).resetTps();
                     }
                     System.out.println(line);
-                    if (nodeDataPairs.size() >= 3) {
+                    if (nodeDataPairs.size() >= 2) {
                         int n = 0;
                         for (NodeDataPair nodeDataPair : nodeDataPairs) {
                             totalTps += nodeDataPair.tps;
-                            System.out.printf("%-40s %1.2f %3s %2s", nodeDataPair.url, (float) nodeDataPair.tps / 10, "Tps", "| ");
+                            System.out.printf("%-40s %1.2f %3s %5d %11s %2s", nodeDataPair.url, (float) nodeDataPair.tps / 10, "Tps",nodeDataPair.totalTransactions, "Transactions","| ");
                             n++;
-                            if (n == 3) {
+                            if (n == 2) {
                                 System.out.print("\n");
                                 n = 0;
                             }
                         }
-                        if (nodeDataPairs.size() % 3 > 0)
-                            System.out.println("\n \n");
-                        else
-                            System.out.println("\n");
                     } else {
                         for (NodeDataPair nodeDataPair : nodeDataPairs) {
-                            System.out.printf("%-40s %1.2f %3s %2s", nodeDataPair.url, (float) nodeDataPair.tps / 10, "Tps", "| ");
+                            System.out.printf("%-40s %1.2f %3s %5d %11s %2s", nodeDataPair.url, (float) nodeDataPair.tps / 10, "Tps",nodeDataPair.totalTransactions, "Transactions","| ");
                         }
                         System.out.println("\n");
                     }
@@ -59,9 +55,9 @@ public class TpsCounter implements Runnable {
                     if (highestTps < totalTps)
                         highestTps = totalTps;
                     System.out.println(line);
-                    System.out.printf("%-40s %1.2f %3s %2s", "Total average tps:", totalTps, "Tps", "| ");
-                    System.out.printf("%-40s %1.2f %3s %2s", "Highest tps:", highestTps, "Tps", "| ");
-                    System.out.printf("%-40s %1.1f %3s %2s", "IOTA-Jammer Version", 1.3f, "", "| \n");
+                    System.out.printf("%-19s %1.2f %3s %2s", "Total average tps:", totalTps, "Tps", "| ");
+                    System.out.printf("%-19s %1.2f %3s %2s", "Highest tps:", highestTps, "Tps", "| ");
+                    System.out.printf("%-19s %1.1f %2s", "IOTA-Jammer Version", 1.4f, "| \n");
                     totalTps = 0;
                     System.out.println(line);
                 }
@@ -83,7 +79,7 @@ public class TpsCounter implements Runnable {
         java.util.ArrayList<NodeDataPair> nodeDataPairs = new java.util.ArrayList<NodeDataPair>();
 
         for (int i = 0; i < iotaJammer.getNodeListSize(); i++) {
-            nodeDataPairs.add(new NodeDataPair(iotaJammer.getNode(i).getNodeURL(), iotaJammer.getNode(i).getTps()));
+            nodeDataPairs.add(new NodeDataPair(iotaJammer.getNode(i).getNodeURL(), iotaJammer.getNode(i).getTps(),iotaJammer.getNode(i).getTotalTransactions()));
         }
         return nodeDataPairs;
     }
@@ -95,9 +91,11 @@ public class TpsCounter implements Runnable {
 class NodeDataPair {
     public String url;
     public int tps;
+    public int totalTransactions;
 
-    public NodeDataPair(String url, int tps) {
+    public NodeDataPair(String url, int tps,int totalTransactions) {
         this.url = url == null ? Thread.currentThread().getName() : url;
         this.tps = tps;
+        this.totalTransactions = totalTransactions;
     }
 }

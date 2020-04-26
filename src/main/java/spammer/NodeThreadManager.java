@@ -27,6 +27,7 @@ public class NodeThreadManager extends VariablesHolder{
     Logger logger = Logger.getLogger(IotaApi.class.getName());
 
     private int tps = 0;
+    private int totalTransactions = 0;
 
     /**
      * Constructor if the NodeThreadManager is loaded via normal URL. The variables will be loaded over the arguments or the default one will be used, if not specified.
@@ -133,12 +134,15 @@ public class NodeThreadManager extends VariablesHolder{
         return tps;
     }
 
+    public int getTotalTransactions(){return totalTransactions;}
+
     public String getNodeURL() {
         return nodeURL;
     }
 
     public void raiseTps() {
         tps++;
+        totalTransactions++;
     }
 
     public void resetTps() {

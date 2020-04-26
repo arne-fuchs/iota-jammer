@@ -114,6 +114,8 @@ public class IOTAJammer extends VariablesHolder{
         System.out.println("Finished starting threads");
     }
 
+
+
     /**
      * Returns one Node from nodes ArrayList
      *
