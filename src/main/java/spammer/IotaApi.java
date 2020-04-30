@@ -118,7 +118,8 @@ public class IotaApi implements Runnable {
         @SuppressWarnings("Convert2Diamond")
         ArrayList<Transfer> transfers = new ArrayList<Transfer>();
 
-        transfers.add(zeroValueTransaction);
+        for(int i = 0;i < nodeThreadManager.getBundlesize();i++)
+            transfers.add(zeroValueTransaction);
 
         int depth = nodeThreadManager.getDepth();
         int minimumWeightMagnitude = nodeThreadManager.getMwm();

@@ -38,7 +38,7 @@ public class NodeThreadManager extends VariablesHolder{
         this.threads = new Thread[iotaJammer.getThreadAmount()];
         this.iotaJammer = iotaJammer;
         this.iotaApi = new IotaApi[iotaJammer.getThreadAmount()];
-        this.nodeURL = nodeURL;
+        this.nodeURL = null;
 
         this.seed = iotaJammer.getSeed();
         this.address = iotaJammer.getAddress();
@@ -48,6 +48,7 @@ public class NodeThreadManager extends VariablesHolder{
         this.reconnect = iotaJammer.getReconnect();
         this.mwm = iotaJammer.getMwm();
         this.depth = iotaJammer.getDepth();
+        this.bundlesize = iotaJammer.getBundlesize();
 
         this.localPOW = iotaJammer.isLocalPOW();
         this.threadAmount = iotaJammer.getThreadAmount();
@@ -71,6 +72,7 @@ public class NodeThreadManager extends VariablesHolder{
         try { this.reconnect = jsonObject.getInt("reconnect"); } catch (JSONException e){ this.reconnect = getReconnect();}
         try { this.mwm = jsonObject.getInt("mwm"); } catch (JSONException e){ this.mwm = getMwm();}
         try { this.depth = jsonObject.getInt("depth"); } catch (JSONException e){ this.depth = getDepth();}
+        try { this.bundlesize = jsonObject.getInt("bundlesize"); } catch (JSONException e){ this.bundlesize = getBundlesize();}
 
         try { this.localPOW = jsonObject.getBoolean("EnableLocalPOW"); } catch (JSONException e){ this.localPOW = isLocalPOW();}
         try { this.threadAmount = jsonObject.getInt("threads"); } catch (JSONException e){ this.threadAmount = getThreadAmount();}

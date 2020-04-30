@@ -18,6 +18,7 @@ public abstract class VariablesHolder {
     protected int reconnect = 0;
     protected int mwm = 0;
     protected int depth = 0;
+    protected int bundlesize = 1;
 
     /**
      * Just getter for the variables with default variables if the variable was not specified
@@ -53,6 +54,8 @@ public abstract class VariablesHolder {
     }
 
     public int getThreadAmount(){ return threadAmount;}
+
+    public int getBundlesize(){return bundlesize;}
 
     public boolean isDEBUG_MODE() {
         return DEBUG_MODE;

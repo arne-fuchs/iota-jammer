@@ -17,7 +17,7 @@ public class NodeFileReader {
     /**
      * DEV MODE CHANGES PATH
      **/
-    private static boolean DEV_MODE = true;
+    private static boolean DEV_MODE = false;
 
     /**
      * Read nodeList File

@@ -66,6 +66,9 @@ public class IOTAJammer extends VariablesHolder{
                 case "delay":
                     iotaJammer.delay = Integer.parseInt(argument.split(" ")[1]);
                     break;
+                case "bundlesize":
+                    iotaJammer.bundlesize = Integer.parseInt(argument.split(" ")[1]);
+                    break;
                 default:
                     System.out.println(RED + "Invalid Argument: " + argument + RESET);
             }
@@ -93,10 +96,8 @@ public class IOTAJammer extends VariablesHolder{
                 nodeThreadManagers.add(new NodeThreadManager(url, this));//Creates Nodes with url from nodeList and thread amount
             }
         } else {//Creates Nodes from .properties and thread amount
-            if(delay == 0 && !jsonListEnabled)
-                new NodeThreadManager((String) null, this).initThreads();
-            else
-                new NodeThreadManager((String) null, this).initThreads(delay);
+            if(!jsonListEnabled)
+                nodeThreadManagers.add(new NodeThreadManager((String) null, this));
         }
         if(jsonListEnabled){
             java.util.ArrayList<JSONObject> jsonObjectsArrayList = NodeFileReader.getJsonNodes();
