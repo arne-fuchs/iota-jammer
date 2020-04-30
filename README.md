@@ -5,15 +5,15 @@ IOTA Tangle spammer written in Java
 
 1: Download
 ```
-sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.4/iota-jammer-1.4.tar.gz
+sudo wget https://github.com/arne-fuchs/iota-jammer/releases/download/v1.5/iota-jammer-1.5.tar.gz
 ```
 2: Extract Files 
 ```
-tar -xvzf iota-jammer-1.4.tar.gz && cd iota-jammer-1.4
+tar -xvzf iota-jammer-1.5.tar.gz && cd iota-jammer-1.5
 ```
 3: Run with
 ```
-java -jar iota-jammer-1.4.jar
+java -jar iota-jammer-1.5.jar
 ```
 ## Agruments for the program:
 
@@ -106,6 +106,14 @@ Specifiys which depth should be used for the transactions. Default is 4.
 
 #### Usage:
 "depth 4"
+
+## bundlesize : 
+Specifiys how many transactions you want to have in your bundle (default 1). Notice, that the "Transaction complete" message
+will only be shown per bundle, not per transactions in the bundle. You may notice, that you still have to do the pow for every
+transaction in the bundle.
+
+#### Usage:
+"bundlesize 25"
 
 
 ## Donations
