@@ -38,7 +38,7 @@ public class NodeThreadManager extends VariablesHolder{
         this.threads = new Thread[iotaJammer.getThreadAmount()];
         this.iotaJammer = iotaJammer;
         this.iotaApi = new IotaApi[iotaJammer.getThreadAmount()];
-        this.nodeURL = null;
+        this.nodeURL = nodeURL;
 
         this.seed = iotaJammer.getSeed();
         this.address = iotaJammer.getAddress();

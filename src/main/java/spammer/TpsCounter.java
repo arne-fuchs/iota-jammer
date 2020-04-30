@@ -47,6 +47,8 @@ public class TpsCounter implements Runnable {
                                 n = 0;
                             }
                         }
+                        if(nodeDataPairs.size() % 2 == 1)
+                            System.out.print("\n");
                     } else {
                         for (NodeDataPair nodeDataPair : nodeDataPairs) {
                             System.out.printf("%-40s %1.2f %3s %5d %11s %2s", nodeDataPair.url, (float) nodeDataPair.tps / 10, "Tps",nodeDataPair.totalTransactions, "Transactions","| ");
@@ -100,7 +102,7 @@ class NodeDataPair {
     public int totalTransactions;
 
     public NodeDataPair(String url, int tps,int totalTransactions) {
-        this.url = url == null ? "Threads" : url;
+        this.url = (url == null ? "Threads" : url);
         this.tps = tps;
         this.totalTransactions = totalTransactions;
     }
