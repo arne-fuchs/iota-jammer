@@ -64,7 +64,7 @@ public class TpsCounter implements Runnable {
                     System.out.printf("%-25s %1.2f %3s %2s", "Total average tps:", totalTps, "Tps", "| ");
                     System.out.printf("%-19s %1.2f %3s %2s", "Highest tps:", highestTps, "Tps", "| ");
                     System.out.printf("%-18s %15d %2s", "Total Transactions", totalTransactionMade, "| ");
-                    System.out.printf("%-30s %1.1f %2s", "IOTA-Jammer Version", 1.5f, "|  \n");
+                    System.out.printf("%-30s %1.1f %2s", "IOTA-Jammer Version", 1.6f, "|  \n");
                     totalTps = 0;
                     totalTransactionMade = 0;
                     System.out.println(line);

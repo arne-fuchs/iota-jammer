@@ -3,11 +3,13 @@ package spammer;
 import org.iota.jota.IotaAPI;
 import org.iota.jota.dto.response.GetNodeInfoResponse;
 import org.iota.jota.dto.response.SendTransferResponse;
+import org.iota.jota.model.Transaction;
 import org.iota.jota.model.Transfer;
 import org.iota.jota.pow.pearldiver.PearlDiverLocalPoW;
 import org.iota.jota.utils.TrytesConverter;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -106,8 +108,9 @@ public class IotaApi implements Runnable {
     /**
      * Send Transcation with Message and Tag to Adress
      */
-    public void sendZeroValueTransaction() {
+    public List<Transaction> sendZeroValueTransaction(List<Transaction> transactionList) {
 
+        SendTransferResponse response;
         String message = TrytesConverter.asciiToTrytes(nodeThreadManager.getMessage());
         String tag = nodeThreadManager.getTag();
         int securityLevel = 2;
@@ -117,7 +120,7 @@ public class IotaApi implements Runnable {
 
         @SuppressWarnings("Convert2Diamond")
         ArrayList<Transfer> transfers = new ArrayList<Transfer>();
-
+        
         for(int i = 0;i < nodeThreadManager.getBundlesize();i++)
             transfers.add(zeroValueTransaction);
 
@@ -125,31 +128,34 @@ public class IotaApi implements Runnable {
         int minimumWeightMagnitude = nodeThreadManager.getMwm();
 
         try {
-            SendTransferResponse response = api.sendTransfer(nodeThreadManager.getSeed(), securityLevel, depth, minimumWeightMagnitude, transfers, null, null, false, false, null);
+            response = api.sendTransfer(nodeThreadManager.getSeed(), securityLevel, depth, minimumWeightMagnitude, transfers, null, null, false, false, transactionList);
             nodeThreadManager.raiseTps();
             if (nodeThreadManager.isDEBUG_MODE()) {
                 logger.log(Level.INFO, threadName + response.getTransactions());
             }
             logger.log(Level.INFO, GREEN + threadName + ": Transaction complete!" + RESET);
+            return response.getTransactions();
         } catch (Exception e) {
             logger.log(Level.WARNING, threadName + " Error: Could not send transaction! "  + (nodeThreadManager.isDEBUG_MODE() ? e.toString() : ""));
             nodeThreadManager.addErrorToThread(COULD_NOT_SEND_TRANSACTION);
         }
+        return null;
     }
 
     @Override
     public void run() {
         connect();
+        List<Transaction> transactionList = null;
             if (nodeThreadManager.getReconnect() > 0) {
                 while (!endThread) {
                     connect();
                     for(int i = 0; i < nodeThreadManager.getReconnect();i++){
-                        sendZeroValueTransaction();
+                        transactionList = sendZeroValueTransaction(transactionList);
                     }
                 }
             }else
             while (!endThread) {
-                sendZeroValueTransaction();
+                transactionList = sendZeroValueTransaction(transactionList);
             }
     }
 
