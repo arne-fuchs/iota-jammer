@@ -1,5 +1,6 @@
 # iota-jammer
 IOTA Tangle spammer written in Java
+WARNING! Only for legacy network. Doesn't really work with 1.5 or above.
 
 ## Run Jammer
 
@@ -121,4 +122,4 @@ transaction in the bundle.
 
 ## Donations
 even very small ones, are always welcome and makes me happy:
-iota1qzvx8el7qkty8e265sztjy3crt4c69w7md8a0n7lgllv06xtkenpq48yu6p
+iota1qqvrqjfscx5ax7vnt8mmtmzj30af3xf7zfm8t7lnaxyrt73awgqckz02upv
