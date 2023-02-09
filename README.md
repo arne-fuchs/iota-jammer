@@ -120,13 +120,3 @@ transaction in the bundle.
 "bundlesize 25"
 
 
-## Donations
-even very small ones, are always welcome and makes me happy:
-
-```
-iota1qqvrqjfscx5ax7vnt8mmtmzj30af3xf7zfm8t7lnaxyrt73awgqckz02upv
-```
-<p align="center">
-  <img src="https://paesserver.de/img/qr.png?raw=true" width="250" title="logo">
-</p>
-
